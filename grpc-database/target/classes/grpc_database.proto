@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "br.com.sd.victor";
+option java_outer_classname = "GrpcDatabaseProto";
+
+package grpcdatabase;
+
+service GrpcDatabase {
+
+  rpc Set(Request) returns (Response);
+
+  rpc Get(Request) returns (Response);
+
+  rpc Del(Request) returns (Response);
+
+  rpc TestAndSet(Request) returns (Response);
+}
+
+message Request {
+  uint64 key = 1;
+  Value value = 2;
+  uint64 checkingVersion = 3;
+}
+
+message Response {
+  Result result = 1;
+  Value value = 2;
+  enum Result {
+    SUCCESS = 0;
+    ERROR = 1;
+    ERROR_NE = 2;
+    ERROR_WV = 3;
+  }
+}
+
+message Value {
+  uint64 version = 1;
+  uint64 timestamp = 2;
+  bytes data = 3;
+}
+
